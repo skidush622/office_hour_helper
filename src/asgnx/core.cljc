@@ -346,10 +346,12 @@
 
 (defn ask-experts [experts {:keys [args user-id]}]
   (def Queue (conj Queue user-id))
-  (def n (query-info user-id))
   (cond
     (nil? experts) [[] "There are no TAs on that class."]
-    :else [[] (str "Successfully register for an office hour slot, " res " people before you.")]))
+    :else [[] (str "Successfully register for an office hour slot, " (query-info user-id) " people before you.")]))
+
+(defn query-student [experts {:keys [args user-id]}]
+  (str "There are " (query-info user-id) " people before you."))
 
 ;; Asgn 3.
 ;;
@@ -403,13 +405,14 @@
 ;; See the integration test in See handle-message-test for the
 ;; expectations on how your code operates
 ;;
+(defn notify []
+  (def Queue (into[] (rest Queue)))
+  "Your message was sent.")
+
 (defn answer-question [conversation {:keys [args user-id]}]
-  (def Queue (rest Queue))
   (if (= 0 (count Queue))
     [[] "The Queue is Empty."]
-    [[(action-send-msg (get Queue 0) "It's your turn")] "Your message was sent."]))
-
-
+    [[(action-send-msg (get Queue 0) "It's your turn")] (notify)]))
 
 
 ;; Asgn 3.
@@ -466,6 +469,7 @@
              "homepage" (stateless homepage)
              "office"   (stateless office-hours)
              "TA"   add-expert
+             "query" query-student
              "register"  ask-experts
              "notify"   answer-question})
 
@@ -494,7 +498,8 @@
 (def queries
   {"expert" experts-on-topic-query
    "ask"    experts-on-topic-query
-   "answer" conversations-for-user-query})
+   "answer" conversations-for-user-query
+   "query" experts-on-topic-query})
 
 
 ;; Don't edit!
