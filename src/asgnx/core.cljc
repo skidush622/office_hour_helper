@@ -336,25 +336,20 @@
 ;; See the integration test in See handle-message-test for the
 ;; expectations on how your code operates
 ;;
-(defn ask-experts [experts {:keys [args user-id]}]
-  (cond
-    (nil? experts) [[] "There are no experts on that topic."]
-    (<= (count args) 2) [[] "You must ask a valid question."]
-    :else [(into[] (concat (action-inserts [:conversations] experts user-id)
-                           (action-send-msgs experts (string/join " " (rest args))))) (experts-question-msg experts (rest args))])
-  (def Queue (conj Queue user-id)))
-
-
 (defn query-info [user-id]
+  (def res -1)
   (loop [x 0]
     (when (not= (get Queue x) user-id)
-     (def res x)
-     (recur (+ x 1))))
-  (action-send-msg user-id (str res))
-  (+ res 1))
+      (def res x)
+      (recur (+ x 1))))
+  (def res (+ res 1))res)
 
-
-
+(defn ask-experts [experts {:keys [args user-id]}]
+  (def Queue (conj Queue user-id))
+  (def n (query-info user-id))
+  (cond
+    (nil? experts) [[] "There are no TAs on that class."]
+    :else [[] (str "Successfully register for an office hour slot, " res " people before you.")]))
 
 ;; Asgn 3.
 ;;
@@ -409,10 +404,6 @@
 ;; expectations on how your code operates
 ;;
 (defn answer-question [conversation {:keys [args user-id]}]
-  (cond
-    (nil? conversation) [[] "You haven't been asked a question."]
-    (= 0 (count args)) [[] "You did not provide an answer."]
-    :else [[(action-send-msg conversation (string/join " " args))] "Your message was sent."])
   (def Queue (rest Queue))
   (if (= 0 (count Queue))
     [[] "The Queue is Empty."]
@@ -474,10 +465,10 @@
              "welcome"  (stateless welcome)
              "homepage" (stateless homepage)
              "office"   (stateless office-hours)
-             "expert"   add-expert
-             "ask"      ask-experts
-             "answer"   answer-question
-             "query" query-info})
+             "TA"   add-expert
+             "register"  ask-experts
+             "notify"   answer-question})
+
 ;; Asgn 3.
 ;;
 ;; @Todo: Add mappings of the cmds "expert", "ask", and "answer" to
