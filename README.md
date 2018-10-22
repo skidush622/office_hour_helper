@@ -5,7 +5,7 @@ The office_hour_helper is targeted at helping Vanderbilt Students and TAs to org
 
 Office Hour is an important part in all the courses, but as a Vanderbilt Student, many of them feel that it is not organized, too many people, waiting too much and not all the TAs are helpful or good at explaining things.
 
-So, office_hour_helper will be designed to help students and TAs to improve office hour quality and provide functions based on the text massage interface which is assign 1, 2, 3 and 4. It will have functions like: register you with a number in the waiting queue and notify you when it's your turn, TA can send a text msg to notify next one, show how many people ahead of you, notify you with any cancellation or change in advance, students can rate TA about their work, send you time and TA's grade the day before office hour...
+So, office_hour_helper will be designed to help students and TAs to improve office hour quality and provide functions based on the text massage interface which is assign 1, 2, 3 and 4. It will have functions like: register you with a number in the waiting queue and notify you when it's your turn, TA can send a text msg to notify next one, show how many people ahead of you...
 
 
 # Questions:
@@ -120,12 +120,11 @@ So, office_hour_helper will be designed to help students and TAs to improve offi
 # Requirements
    
  1. Students can register themselves with a number in the waiting queue in advance
- 2. Students can get notification when it's your turn or when any cancellation or changes happen
- 3. students can rate TA about their work
- 4. Students can know how many people ahead of you in the queue
- 5. Students can mark themselves as urgent twice one month
- 6. TA can send a text msg to notify next one and update the queue
- 7. TA can send a text msg to cancel or change office hour which notifies all class
+ 2. Students can know how many people are waiting before you when you register.
+ 3. Students can get notification when it's your turn
+ 4. Students can query how many people ahead of you in the queue
+ 5. TA can send a text msg to notify next one and update the queue
+ 6. TA can know if the queue is Empty.
   
 
 # Development Approach
@@ -138,9 +137,9 @@ So, office_hour_helper will be designed to help students and TAs to improve offi
                                       send txt to:                                |_Data structure: Queue, Map....
                                       |_1.register in the queue                   |_1.add name into queue and sort by time
   ___________           ____________  |_2.know how many people ahead      ______  |_2.count names ahead of this one
- |           | BREAKS  |            | |_3.rate TA                        |      | |_3.update TA's grade properity
+ |           | BREAKS  |            | |_3.get notified                   |      | |_3.send msg to the peek of queue
  |User Story |-------->|Requirements|-|_4.notify next one         ------>|Design|-|_4.send msg to next & remove 1st from queue
- |___________|         |____________| |_5.cancel or change               |______| |_5.send msg to all students
+ |___________|         |____________| |_...                              |______| |_...
                                       |_...                                       |_...
                                       output: txt              
                                                 
