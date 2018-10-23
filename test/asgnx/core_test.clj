@@ -186,68 +186,52 @@
           smgr   (kvstore/create state)
           system {:state-mgr smgr
                   :effect-handlers ehdlrs}]
-      (is (= "There are no experts on that topic."
+      (is (= "There are no TAs on that class."
              (<!! (handle-message
                     system
                     "test-user"
-                    "ask food best burger in nashville"))))
-      (is (= "test-user is now an expert on food."
+                    "register math"))))
+      (is (= "test-user is now a teaching assistant on math."
              (<!! (handle-message
                     system
                     "test-user"
-                    "expert food"))))
-      (is (= "Asking 1 expert(s) for an answer to: \"what burger\""
+                    "TA math"))))
+      (is (= "test-user1 successfully register for an office hour slot on math, 0 people before you."
              (<!! (handle-message
                     system
-                    "test-user"
-                    "ask food what burger"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user"))))
-      (is (= "test-user2 is now an expert on food."
+                    "test-user1"
+                    "register math"))))
+      (is (= "test-user2 successfully register for an office hour slot on math, 1 people before you."
              (<!! (handle-message
                     system
                     "test-user2"
-                    "expert food"))))
-      (is (= "Asking 2 expert(s) for an answer to: \"what burger\""
-             (<!! (handle-message
-                    system
-                    "test-user"
-                    "ask food what burger"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user2"))))
-      (is (= "You must ask a valid question."
-             (<!! (handle-message
-                    system
-                    "test-user"
-                    "ask food "))))
-      (is (= "test-user is now an expert on nashville."
-             (<!! (handle-message
-                    system
-                    "test-user"
-                    "expert nashville"))))
-      (is (= "Asking 1 expert(s) for an answer to: \"what bus\""
+                    "register math"))))
+      (is (= "1 people before you."
              (<!! (handle-message
                     system
                     "test-user2"
-                    "ask nashville what bus"))))
-      (is (= "what bus"
-             (<!! (pending-send-msgs system "test-user"))))
+                    "query"))))
       (is (= "Your answer was sent."
              (<!! (handle-message
                    system
                    "test-user"
-                   "answer the blue bus"))))
-      (is (= "the blue bus"
-             (<!! (pending-send-msgs system "test-user2"))))
-      (is (= "You did not provide an answer."
+                   "notify"))))
+      (is (= "It's your turn."
+             (<!! (pending-send-msgs system "test-user1"))))
+      (is (= "0 people before you."
+             (<!! (handle-message
+                   system
+                   "test-user2"
+                   "query"))))
+      (is (= "Your answer was sent."
              (<!! (handle-message
                    system
                    "test-user"
-                   "answer"))))
-      (is (= "You haven't been asked a question."
+                   "notify"))))
+      (is (= "It's your turn."
+             (<!! (pending-send-msgs system "test-user2"))))
+      (is (= "The Queue is Empty."
              (<!! (handle-message
                    system
-                   "test-user3"
-                   "answer the blue bus")))))))
+                   "test-user"
+                   "notify")))))))
